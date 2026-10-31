@@ -3,8 +3,6 @@ using MoonSharp.Interpreter;
 
 namespace ProbablyLua.Api
 {
-    // Runtime callbacks are synchronous, but never get an unbounded Lua loop.
-    // Auto-yield is an instruction budget; it cannot interrupt a native call.
     internal sealed class LuaCallbacks
     {
         private readonly Script _script;

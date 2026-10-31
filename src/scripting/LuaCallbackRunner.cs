@@ -4,8 +4,7 @@ using MoonSharp.Interpreter;
 namespace ProbablyLua.Api
 {
     // MoonSharp allocates large VM stacks for each new coroutine. Keep a private
-    // worker suspended between completed calls instead. A timeout, script error
-    // or user yield discards the worker; unfinished Lua is never resumed later.
+    // worker suspended between completed calls instead.
     internal sealed class LuaCallbackRunner
     {
         internal const string Source = @"
