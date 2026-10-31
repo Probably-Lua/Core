@@ -1,0 +1,79 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <AssemblyName>ProbablyLua</AssemblyName>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <GameManagedDir Condition="'$(GameManagedDir)' == ''">$(MSBuildProjectDirectory)/../Probably Stolen_Data/Managed</GameManagedDir>
+        <ILRepackTargetsFile>$(MSBuildProjectDirectory)/ILRepack.targets</ILRepackTargetsFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="src/**/*.cs" />
+
+        <PackageReference Include="MoonSharp" Version="2.0.0" GeneratePathProperty="true" ExcludeAssets="all" />
+
+        <Reference Include="0Harmony">
+            <HintPath>$(GameManagedDir)/0Harmony.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="MoonSharp.Interpreter">
+            <HintPath>$(PkgMoonSharp)/lib/net35-client/MoonSharp.Interpreter.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="Assembly-CSharp">
+            <HintPath>$(GameManagedDir)/Assembly-CSharp.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>$(GameManagedDir)/UnityEngine.CoreModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="UnityEngine.AudioModule">
+            <HintPath>$(GameManagedDir)/UnityEngine.AudioModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="UnityEngine.TextRenderingModule">
+            <HintPath>$(GameManagedDir)/UnityEngine.TextRenderingModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="UnityEngine.UIModule">
+            <HintPath>$(GameManagedDir)/UnityEngine.UIModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="UnityEngine.UI">
+            <HintPath>$(GameManagedDir)/UnityEngine.UI.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="Unity.TextMeshPro">
+            <HintPath>$(GameManagedDir)/Unity.TextMeshPro.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="Unity.Localization">
+            <HintPath>$(GameManagedDir)/Unity.Localization.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="UnityEngine.InputLegacyModule">
+            <HintPath>$(GameManagedDir)/UnityEngine.InputLegacyModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.48" PrivateAssets="all" />
+    </ItemGroup>
+
+    <Target Name="CheckReferences" BeforeTargets="ResolveReferences">
+        <Error Condition="!Exists('$(GameManagedDir)/Assembly-CSharp.dll')" Text="Missing game DLL: $(GameManagedDir)/Assembly-CSharp.dll. Set GameManagedDir to the game's Managed directory." />
+        <Error Condition="!Exists('$(PkgMoonSharp)/lib/net35-client/MoonSharp.Interpreter.dll')" Text="Missing MoonSharp 2.0.0 net35-client assembly. Run dotnet restore." />
+    </Target>
+</Project>

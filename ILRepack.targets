@@ -1,0 +1,20 @@
+<Project>
+    <Target Name="ILRepacker" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' and '$(IsCrossTargetingBuild)' != 'true'">
+        <PropertyGroup>
+            <MergedDir>$(TargetDir)standalone/</MergedDir>
+        </PropertyGroup>
+
+        <MakeDir Directories="$(MergedDir)" />
+
+        <ItemGroup>
+            <MergeInput Include="$(TargetPath)" />
+            <MergeInput Include="$(PkgMoonSharp)/lib/net35-client/MoonSharp.Interpreter.dll" />
+
+            <RepackLibraryPath Include="$(GameManagedDir)" />
+        </ItemGroup>
+
+        <ILRepack InputAssemblies="@(MergeInput)" LibraryPath="@(RepackLibraryPath)" OutputFile="$(MergedDir)ProbablyLua.dll" TargetKind="Dll" Internalize="false" NoRepackRes="true" />
+
+        <Error Condition="!Exists('$(MergedDir)ProbablyLua.dll')" Text="ILRepack did not produce standalone/ProbablyLua.dll." />
+    </Target>
+</Project>

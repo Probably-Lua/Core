@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Manifest>
+    <ID>probably_lua</ID>
+
+    <Name>Probably Lua</Name>
+
+    <Author>Cain</Author>
+
+    <ModVersion>0.0.1</ModVersion>
+
+    <Description>Lua scripting bridge for Probably Stolen.</Description>
+
+    <GameVersions>
+        <Version>0.46D</Version>
+    </GameVersions>
+
+    <Prerequisites />
+
+    <Assemblies>
+        <Assembly>ProbablyLua.dll</Assembly>
+    </Assemblies>
+
+    <Capabilities>
+        <Capability>files</Capability>
+        <Capability>process</Capability>
+        <Capability>dynamic-code</Capability>
+        <Capability>reflection-external</Capability>
+    </Capabilities>
+</Manifest>
