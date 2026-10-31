@@ -6,7 +6,7 @@
 
     <Author>Cain</Author>
 
-    <ModVersion>0.0.1</ModVersion>
+    <ModVersion>0.0.2</ModVersion>
 
     <Description>Lua scripting bridge for Probably Stolen.</Description>
 
@@ -22,7 +22,6 @@
 
     <Capabilities>
         <Capability>files</Capability>
-        <Capability>process</Capability>
         <Capability>dynamic-code</Capability>
         <Capability>reflection-external</Capability>
     </Capabilities>
