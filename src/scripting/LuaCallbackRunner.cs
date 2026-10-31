@@ -38,6 +38,7 @@ end";
                 _arguments = null;
                 return arguments;
             });
+
             _finish = DynValue.NewCallback((_, results) =>
             {
                 _result = results.Count == 0 ? DynValue.Void : DynValue.NewTuple(results.GetArray());
@@ -46,23 +47,32 @@ end";
             });
         }
 
-        internal DynValue Invoke(DynValue callback, object[] args, int instructionLimit)
+        internal DynValue Invoke(DynValue callback, object[] args)
         {
             _completed = false;
             _arguments = new DynValue[args.Length + 1];
             _arguments[0] = callback;
+
             try
             {
                 for (int i = 0; i < args.Length; i++)
                     _arguments[i + 1] = DynValue.FromObject(_script, args[i]);
 
-                _coroutine.AutoYieldCounter = instructionLimit;
-                DynValue yielded = _started ? _coroutine.Resume() : _coroutine.Resume(_take, _finish);
+                DynValue yielded = _started
+                    ? _coroutine.Resume()
+                    : _coroutine.Resume(_take, _finish);
+
                 _started = true;
-                if (!_completed || _coroutine.State != CoroutineState.Suspended ||
-                    yielded.Type != DataType.Table || !ReferenceEquals(yielded.Table, _completedToken.Table))
-                    throw new ScriptRuntimeException($"Lua callback exceeded {instructionLimit} instructions or yielded. " +
-                        "Keep callbacks short; move definitions into lua/init.lua.");
+
+                if (!_completed ||
+                    _coroutine.State != CoroutineState.Suspended ||
+                    yielded.Type != DataType.Table ||
+                    !ReferenceEquals(yielded.Table, _completedToken.Table))
+                {
+                    throw new ScriptRuntimeException(
+                        "Lua callback yielded unexpectedly."
+                    );
+                }
 
                 return _result;
             }

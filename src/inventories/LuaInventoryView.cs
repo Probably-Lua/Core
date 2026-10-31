@@ -125,7 +125,6 @@ namespace ProbablyLua.Api
                 using var fill = FillScope(item);
                 for (int attempt = 0; attempt < 128 && moved < amount && !LuaItemView.IsDestroyed(item); attempt++)
                 {
-                    _factory.ChargeOperation();
                     SlotMarker? slot = _root.TryFindOneValidInventorySlot(item);
                     if (slot == null || slot.numTransfer <= 0)
                         break;
@@ -213,7 +212,6 @@ namespace ProbablyLua.Api
                 throw new ScriptRuntimeException("Target filters may inspect inventories, but cannot change them.");
 
             _factory.EnsureMutable();
-            _factory.ChargeOperation();
             LuaInventoryGraph.CheckAccess(_root, _factory, inserting: true);
         }
 

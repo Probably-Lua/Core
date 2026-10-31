@@ -75,7 +75,6 @@ namespace ProbablyLua.Api
             new(root, this, owner, readOnly);
 
         internal LuaItemView View(GameItem item, bool readOnly = false) => new(item, this, readOnly);
-        internal void ChargeOperation() => _callbacks.ChargeItemOperation();
 
         internal void EnsureMutable()
         {
