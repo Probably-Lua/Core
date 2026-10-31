@@ -24,14 +24,28 @@ if [[ ! -s "$merged" ]]; then
     exit 1
 fi
 
+patched="$root/bin/Release/netstandard2.1/standalone/ProbablyLua.patched.dll"
+dotnet run --project "$root/tools/PatchMoonSharp/PatchMoonSharp.csproj" \
+    -c Release -- \
+    "$merged" \
+    "$patched" \
+    "$game/Probably Stolen_Data/Managed"
+
+if [[ ! -s "$patched" ]]; then
+    echo 'Patched standalone DLL missing.' >&2
+    exit 1
+fi
+
 package="$root/dist/ProbablyLua"
 rm -rf -- "$package"
 mkdir -p -- "$package"
 
-cp -- "$merged" "$package/ProbablyLua.dll"
+cp -- "$patched" "$package/ProbablyLua.dll"
 cp -- "$root/manifest.xml" "$package/manifest.xml"
 
 cp -- "$root/LICENSE" "$package/LICENSE"
 cp -- "$root/THIRD_PARTY_LICENSES/MoonSharp.LICENSE" "$package/MoonSharp.LICENSE"
+
+cp -- "$root/logo.jpg" "$package/logo.jpg"
 
 printf 'Packaged: %s\n' "$package"
