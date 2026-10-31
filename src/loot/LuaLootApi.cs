@@ -13,7 +13,6 @@ namespace ProbablyLua.Api
         private readonly LuaCallbacks _callbacks;
         private readonly List<Action> _pending = new();
         private readonly HashSet<string> _declared = new(StringComparer.Ordinal);
-        private int _operations;
         private bool _committed;
         private bool _disabled;
 
@@ -198,7 +197,6 @@ namespace ProbablyLua.Api
         {
             var batch = new List<Action>(operations);
 
-            _operations += batch.Count;
             if (_committed)
             {
                 foreach (Action apply in batch)
