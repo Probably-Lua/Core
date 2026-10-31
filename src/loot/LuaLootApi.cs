@@ -8,7 +8,6 @@ namespace ProbablyLua.Api
     // are staged so a failing mod cannot leave half of its loot changes behind.
     internal sealed class LuaLootApi
     {
-        private const int MaxEntries = 1024;
         private readonly string _modId;
         private readonly Script _script;
         private readonly LuaCallbacks _callbacks;
@@ -167,9 +166,6 @@ namespace ProbablyLua.Api
             var seen = new HashSet<string>(StringComparer.Ordinal);
             foreach (TablePair pair in table.Pairs)
             {
-                if (entries.Count >= MaxEntries)
-                    throw new ScriptRuntimeException($"{method}(): at most {MaxEntries} entries are allowed per call.");
-
                 if (pair.Key.Type != DataType.String)
                     throw new ScriptRuntimeException($"{method}(): entry IDs must be strings.");
 
