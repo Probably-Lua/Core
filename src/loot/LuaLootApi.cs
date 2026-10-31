@@ -8,7 +8,6 @@ namespace ProbablyLua.Api
     // are staged so a failing mod cannot leave half of its loot changes behind.
     internal sealed class LuaLootApi
     {
-        private const int MaxOperations = 4096;
         private const int MaxEntries = 1024;
         private readonly string _modId;
         private readonly Script _script;
@@ -202,8 +201,6 @@ namespace ProbablyLua.Api
         private void Queue(IEnumerable<Action> operations)
         {
             var batch = new List<Action>(operations);
-            if (_operations + batch.Count > MaxOperations)
-                throw new ScriptRuntimeException($"Loot edit limit exceeded: at most {MaxOperations} journal operations per mod per session. Avoid rewriting tables every frame.");
 
             _operations += batch.Count;
             if (_committed)
