@@ -8,14 +8,11 @@ namespace ProbablyLua.Api
     // are staged so a failing mod cannot leave half of its loot changes behind.
     internal sealed class LuaLootApi
     {
-        private const int MaxOperations = 4096;
-        private const int MaxEntries = 1024;
         private readonly string _modId;
         private readonly Script _script;
         private readonly LuaCallbacks _callbacks;
         private readonly List<Action> _pending = new();
         private readonly HashSet<string> _declared = new(StringComparer.Ordinal);
-        private int _operations;
         private bool _committed;
         private bool _disabled;
 
@@ -168,9 +165,6 @@ namespace ProbablyLua.Api
             var seen = new HashSet<string>(StringComparer.Ordinal);
             foreach (TablePair pair in table.Pairs)
             {
-                if (entries.Count >= MaxEntries)
-                    throw new ScriptRuntimeException($"{method}(): at most {MaxEntries} entries are allowed per call.");
-
                 if (pair.Key.Type != DataType.String)
                     throw new ScriptRuntimeException($"{method}(): entry IDs must be strings.");
 
@@ -202,10 +196,7 @@ namespace ProbablyLua.Api
         private void Queue(IEnumerable<Action> operations)
         {
             var batch = new List<Action>(operations);
-            if (_operations + batch.Count > MaxOperations)
-                throw new ScriptRuntimeException($"Loot edit limit exceeded: at most {MaxOperations} journal operations per mod per session. Avoid rewriting tables every frame.");
 
-            _operations += batch.Count;
             if (_committed)
             {
                 foreach (Action apply in batch)

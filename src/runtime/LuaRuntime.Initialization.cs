@@ -16,9 +16,6 @@ namespace ProbablyLua
 
         public void BeginLoad(string source)
         {
-            if (source.Length > LuaFileLoader.MaxFileLength)
-                throw new ScriptRuntimeException("lua/init.lua exceeds the 512 KiB source limit.");
-
             _initTime.Start();
 
             try

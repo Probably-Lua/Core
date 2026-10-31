@@ -233,7 +233,6 @@ namespace ProbablyLua.Api
                 throw new ScriptRuntimeException("can_target callbacks may only inspect items; perform changes in the action callback.");
 
             _factory.EnsureMutable();
-            _factory.ChargeOperation();
             return Require();
         }
 

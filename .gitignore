@@ -92,3 +92,4 @@ luac.out
 
 # ===== Artifacts =====
 dist/*
+dead-code-report.log

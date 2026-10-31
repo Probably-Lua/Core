@@ -9,11 +9,8 @@ namespace ProbablyLua.Api
     // never through System.IO or a shared Lua filesystem.
     internal sealed class LuaFileLoader
     {
-        internal const int MaxFileLength = 512 * 1024;
-        private const int MaxFileCalls = 256;
         private readonly Script _script;
         private readonly string _modId;
-        private int _calls;
         private bool _sealed;
 
         internal LuaFileLoader(Script script, string modId)
@@ -38,15 +35,9 @@ namespace ProbablyLua.Api
                     throw new ScriptRuntimeException($"Lua source '{path}' uses a symbolic link. Only regular files inside this mod's lua/ directory are allowed.");
             }
 
-            if (new FileInfo(current).Length > MaxFileLength)
-                throw new ScriptRuntimeException($"Lua source '{path}' exceeds the 512 KiB source limit.");
-
             string? source = ModHelper.ReadModFileText(modId, path);
             if (source == null)
                 throw new ScriptRuntimeException($"Could not read Lua source '{path}' in mod '{modId}'.");
-
-            if (source.Length > MaxFileLength)
-                throw new ScriptRuntimeException($"Lua source '{path}' exceeds the 512 KiB source limit.");
 
             return source;
         }
@@ -58,9 +49,6 @@ namespace ProbablyLua.Api
 
             if (args.Count != 1 || args[0].Type != DataType.String)
                 throw new ScriptRuntimeException("dofile(path) expects a relative Lua file path.");
-
-            if (++_calls > MaxFileCalls)
-                throw new ScriptRuntimeException($"dofile() limit exceeded: at most {MaxFileCalls} Lua files per mod initialization. Check for recursive includes.");
 
             string path = Resolve(args[0].String);
             if (!ModHelper.ModFileExists(_modId, path))

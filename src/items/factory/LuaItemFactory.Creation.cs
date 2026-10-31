@@ -15,7 +15,6 @@ namespace ProbablyLua.Api
         internal GameItem Spawn(string input, int? amount = null)
         {
             EnsureMutable();
-            _callbacks.ChargeItemOperation();
             if (!_active || PlayerStore.Instance == null)
                 throw new ScriptRuntimeException("items.spawn(): gameplay is not ready. Spawn items from a gameplay event or an item action.");
 
