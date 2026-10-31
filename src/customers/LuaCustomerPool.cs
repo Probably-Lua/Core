@@ -21,9 +21,6 @@ namespace ProbablyLua.Api
             if (_manager == null)
                 throw new ScriptRuntimeException("The customer-generation event has ended. Do not keep its pool for later use.");
 
-            if (++_count > 32)
-                throw new ScriptRuntimeException("A mod may add at most 32 customers per generation event.");
-
             _manager.AddClient(_customers.Create(id));
         }
 
