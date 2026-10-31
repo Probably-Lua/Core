@@ -8,7 +8,6 @@ namespace ProbablyLua.Api
     {
         private StoreClientManager? _manager;
         private readonly LuaCustomers _customers;
-        private int _count;
 
         internal LuaCustomerPool(StoreClientManager manager, LuaCustomers customers)
         {
